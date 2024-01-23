@@ -85,4 +85,12 @@ router.get('/getListStudentAPI',function (req,res) {
     })
 })
 
+router.get('/showListStudent',function (req,res) {
+   Student.find({}).then((data)=>{
+        res.render('liststudent',{value : data});
+    }).catch(error => {
+        res.send('Co loi xay ra')
+    })
+})
+
 module.exports = router;
