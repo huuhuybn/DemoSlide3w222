@@ -56,12 +56,14 @@ router.post('/insertStudent',function (req,res) {
     var hoten = req.body.hoten
     var number = req.body.number
     var address = req.body.address
+    var birthday = req.body.birthday
 
     var stun = new Student({
         name : name,
-        hoten : hoten,
+        hoTen : hoten,
         number : number,
-        address : address
+        address : address,
+        birthday : birthday
     })
 
     stun.save().then(()=>{
@@ -91,6 +93,60 @@ router.get('/showListStudent',function (req,res) {
     }).catch(error => {
         res.send('Co loi xay ra')
     })
+})
+router.get('/deleteStudent',function (req,res) {
+    const id = req.query.id;
+    Student.deleteOne({_id : id})
+        .then(()=>{
+        res.redirect('/');
+    }).catch(error =>{
+        res.send('co loi xay ra');
+    })
+})
+
+router.get('/showEditStudent',function (req,res) {
+    const id = req.query.id;
+    Student.find({_id : id}).then(data =>{
+        console.log(data)
+        res.render('editstudent',{sinhvien : data[0]})
+    }).catch(error => {
+        res.send('Co loi xay ra');
+    })
+
+})
+router.post('/editStudent',function (req,res) {
+    const id = req.body.id;
+    var name = req.body.name
+    var hoten = req.body.hoten
+    var number = req.body.number
+    var address = req.body.address
+    var birthday = req.body.birthday;
+    console.log(id)
+
+    var stun = new Student({
+        name : name,
+        hoten : hoten,
+        number : number,
+        address : address,
+        birthday : birthday
+    })
+    Student.findByIdAndUpdate(id, {
+        name : name,
+        hoten : hoten,
+        number : number,
+        address : address,
+        birthday : birthday }, null)
+        .then(updatedDoc => {
+            // xử lý khi cập nhật thành công
+            console.log(updatedDoc)
+            res.redirect('/showListStudent')
+        })
+        .catch(err => {
+            // xử lý lỗi
+            res.send('co loi xay ra')
+        });
+
+
 })
 
 module.exports = router;
