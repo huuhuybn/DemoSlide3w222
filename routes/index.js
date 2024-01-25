@@ -6,6 +6,9 @@ var router = express.Router();
 // tập viết API cho ứng dụng mobile
 /* GET home page. */
 
+var multer = require('multer');
+var upload = multer({ dest : 'upload/'})
+
 const urlDB = "mongodb+srv://admin:r2xfY0vvdlFeolYr@cluster0.jkglkic.mongodb.net/?retryWrites=true&w=majority"
 
 // mở kết nối bằng thư viện mongosse
@@ -45,7 +48,7 @@ router.get('/showInsertStudentForm',
         res.render('insert')
 })
 
-router.post('/insertStudent',function (req,res) {
+router.post('/insertStudent', upload.single('avatar'),function (req,res) {
   // lay du lieu tu form
   // // ket noi vao database , tao Sinh vien
   //   <input name="name" placeholder="Nhập tên sinh viên ..."/>
@@ -63,7 +66,8 @@ router.post('/insertStudent',function (req,res) {
         hoTen : hoten,
         number : number,
         address : address,
-        birthday : birthday
+        birthday : birthday,
+        avatar : req.file.path
     })
 
     stun.save().then(()=>{
