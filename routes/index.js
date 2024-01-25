@@ -71,9 +71,7 @@ router.post('/insertStudent',function (req,res) {
     }).catch(error =>{
         res.send('Them that bai ' + error.message)
     })
-
 })
-
 
 router.get('/', function (req, res, next) {
     res.render('index', {title: 'Express'});
